@@ -22,6 +22,13 @@ mongo = PyMongo(app, uri="mongodb://brandonsfick:deathstar1@ds141623.mlab.com:41
 # # reflect the tables
 # Base.prepare(engine, reflect=True)
 
+def insert_image(request):
+        with open(request.GET["image_name"], "rb") as image_file:
+            encoded_string = base64.b64encode(image_file.read())
+            print encoded_string
+            mongo.db.insert({"image":encoded_string})
+            return HttpResponse("inserted")
+
 @app.route("/")
 def index():
     """Return the homepage."""
@@ -34,11 +41,12 @@ def index():
         added = [f for f in after if not f in before]
         print(added)
         # Update the Mongo database using update and upsert=True
-        mongo.db.updateOne({}, added, upsert=True)
-
+    
+    insert_image(request)
     # Return template and data
     return 
-
+    # return render_template("index.html", Mars=mars_data) 
+    
 if __name__ == "__main__":
     #app.debug = True
     app.run()
