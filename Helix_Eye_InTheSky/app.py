@@ -9,9 +9,14 @@ from flask import send_file
 from flask import Flask, render_template
 import dropbox
 import glob
-
-
-
+import datetime
+from shutil import copy2
+import re
+import fnmatch
+import random
+import shutil
+import static
+import sys
 
 app = Flask(__name__)
 
@@ -19,7 +24,6 @@ app = Flask(__name__)
 # Database Setup
 #################################################
 
-# mongo = PyMongo(app, uri="mongodb://brandonsfick:deathstar1@ds141623.mlab.com:41623/helix_eye")
 
 # # reflect an existing database into a new model
 # Base = automap_base()
@@ -30,22 +34,10 @@ app = Flask(__name__)
 global path_to_watch
 
 path_to_watch = r"/Users/BFick/Dropbox/Apps/Camera_Images/Apps/Camera_Images/"                            # Watching Desktop
-# statinfo_before = os.stat("/Users/BFick/Desktop/Camera_images/test.txt") # MAC
-    # statinfo_before = os.stat("C:\Users\B\Desktop\Camera_images") # PC
 
-# statinfo_size_before = statinfo_before.st_size                  # Get size of test.txt
+
 before = dict ([(f, None) for f in os.listdir (path_to_watch)]) # Load 'before' dictionary
-    # global statinfo_size_before
 
-# while 1:
-#     added = ''
-#     time.sleep (5) # 5 sec between polling
-#     after = dict ([(f, None) for f in os.listdir (path_to_watch)]) # Load 'after' dictionary
-#     added = [f for f in after if not f in before]                  # Was anything added?
-#     if added: 
-#         print("Added: ", ", ".join (added))
-
-#     before = after
 @app.route("/")
 def index():
     def newest(path):
@@ -75,13 +67,35 @@ def index():
 
 @app.route("/all_images.html")
 def index2():
+    
 
-    return render_template("all_images.html")
+    def files(path):
+        files_path = os.path.join(path, '*')
+        files = sorted(glob.iglob(files_path), key=os.path.getctime, reverse=True) 
+        return files
+    filePaths=files(path_to_watch)
+   
+    NewPath = r"/Users/BFick/Desktop/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/Last20"
+    shutil.rmtree(NewPath)
+    os.makedirs(NewPath)
+    s=0
+    updatedfiles=[]
+    for s in range(0,20):
+        copy2(filePaths[s], NewPath)
+        filename=filePaths[s].rsplit('/',1)[1]
+        updatedfiles.append(r"/static/Last20/" +filename)
+
+    return render_template("all_images.html", files=updatedfiles)
 
 @app.route("/about.html")
 def index3():
 
     return render_template("about.html")
+
+@app.route("/live_feed.html")
+def index4():
+
+    return render_template("live_feed.html")
 
 if __name__ == "__main__":
     #app.debug = True
