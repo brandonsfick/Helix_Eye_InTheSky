@@ -6,7 +6,7 @@ import numpy as np
 import sqlalchemy
 from flask import send_file
 from flask import Flask, render_template
-import dropbox
+# import dropbox
 import glob
 import datetime
 from shutil import copy2
@@ -32,9 +32,9 @@ def index():
         recentPath=max(paths, key=os.path.getctime)
         result = recentPath.split('/')[-1]
         return result
-    NewCarpath= r"/Users/BFick/Desktop/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/NewCar_image/" # UPDATE for your computer
-    NewPersonpath= r"/Users/BFick/Desktop/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/NewPerson_image/" # UPDATE for your computer
-    NonAlertpath =r"/Users/BFick/Desktop/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/NonAlert_image/" # UPDATE for your computer
+    NewCarpath= r"/Users/sstev/Documents/Final Project/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/NewCar_image/" # UPDATE for your computer
+    NewPersonpath= r"/Users/sstev/Documents/Final Project/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/NewPerson_image/" # UPDATE for your computer
+    NonAlertpath =r"/Users/sstev/Documents/Final Project/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/NonAlert_image/" # UPDATE for your computer
     
     NewCarImage=newest(NewCarpath)
     NewCarPath = "static/NewCar_image/" + NewCarImage
@@ -58,7 +58,7 @@ def index2():
         files = sorted(glob.iglob(files_path), key=os.path.getctime, reverse=True) 
         return files
     
-    NewPath = r"/Users/BFick/Desktop/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/Last20" # UPDATE for your computer
+    NewPath = r"/Users/sstev/Documents/Final Project/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/Last20" # UPDATE for your computer
     filePaths=files(NewPath)
     s=0
     updatedfiles=[]
