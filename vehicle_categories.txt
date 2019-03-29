@@ -1,0 +1,78 @@
+Serial	Description	Category
+n03770679	minivan	n03896419
+n03884639	pantechnicon	n03796401
+n02831335	berlin	n03670208
+n02871314	bookmobile	n04520170
+n02907194	brougham	n04166281
+n03173929	"delivery truck, delivery van, panel truck"	n04520170
+n03342961	finisher	n04037443
+n03404012	funny wagon	n02701002
+n03472937	gypsy cab	n02930766
+n03632852	"ladder truck, aerial ladder truck"	n03345487
+n03648667	laundry truck	n04520170
+n03764822	milk float	n04520170
+n03769967	minicab	n03770085
+n03785016	moped	n03769722
+n03796401	moving van	n04520170
+n03881534	panda car	n03141065
+n03896419	passenger van	n04520170
+n03977966	"police van, police wagon, paddy wagon, patrol wagon, wagon, black Maria"	n04520170
+n04201733	shooting brake	n02814533
+n04322801	stock car	n04037443
+n04388372	tandem trailer	n04467665
+n04399269	technical	n03930630
+n02701002	ambulance	n02958343
+n02814533	"beach wagon, station wagon, wagon, estate car, beach waggon, station waggon, waggon"	n02958343
+n02924554	"bus, jalopy, heap"	n02958343
+n02930766	"cab, hack, taxi, taxicab"	n02958343
+n03079136	"compact, compact car"	n02958343
+n03100240	convertible	n02958343
+n03119396	coupe	n02958343
+n03141065	"cruiser, police cruiser, patrol car, police car, prowl car, squad car"	n02958343
+n03256166	"dump truck, dumper, tipper truck, tipper lorry, tip truck, tipper"	n04490091
+n03268790	"electric, electric automobile, electric car"	n02958343
+n03345487	"fire engine, fire truck"	n04490091
+n03417042	"garbage truck, dustcart"	n04490091
+n03421669	gas guzzler	n02958343
+n03493219	hardtop	n02958343
+n03498781	hatchback	n02958343
+n03539103	horseless carriage	n02958343
+n03543394	"hot rod, hot-rod"	n02958343
+n03594945	"jeep, landrover"	n02958343
+n03670208	"limousine, limo"	n02958343
+n03680512	loaner	n02958343
+n03690473	"lorry, camion"	n04490091
+n03769722	"minibike, motorbike"	n03790512
+n03770085	minicar	n02958343
+n03777568	Model T	n02958343
+n03870105	pace car	n02958343
+n03930630	"pickup, pickup truck"	n04490091
+n04037443	"racer, race car, racing car"	n02958343
+n04097373	"roadster, runabout, two-seater"	n02958343
+n04166281	"sedan, saloon"	n02958343
+n04263139	sound truck	n04490091
+n04285008	"sports car, sport car"	n02958343
+n04285965	"sport utility, sport utility vehicle, S.U.V., SUV"	n02958343
+n04302988	Stanley Steamer	n02958343
+n04322924	stock car	n02958343
+n04347119	"subcompact, subcompact car"	n02958343
+n04368695	"swamp buggy, marsh buggy"	n02704792
+n04459122	"touring car, phaeton, tourer"	n02958343
+n04461696	"tow truck, tow car, wrecker"	n04490091
+n04465666	tractor	n04490091
+n04466871	"trail bike, dirt bike, scrambler"	n03790512
+n04467665	"trailer truck, tractor trailer, trucking rig, rig, articulated lorry, semi"	n04490091
+n04474035	"transporter, car transporter"	n04490091
+n04516354	"used-car, secondhand car"	n02958343
+n04520170	van	n04490091
+n02704792	"amphibian, amphibious vehicle"	n03791235
+n02854630	bloodmobile	n03791235
+n02958343	"car, auto, automobile, machine, motorcar"	n03791235
+n03221643	doodlebug	n03791235
+n03389761	"four-wheel drive, 4WD"	n03791235
+n03444034	go-kart	n03791235
+n03445924	"golfcart, golf cart"	n03791235
+n03506880	hearse	n03791235
+n03790512	"motorcycle, bike"	n03791235
+n04252225	"snowplow, snowplough"	n03791235
+n04490091	"truck, motortruck"	n03791235
