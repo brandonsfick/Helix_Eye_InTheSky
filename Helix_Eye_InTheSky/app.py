@@ -17,7 +17,6 @@ import random
 import shutil
 import static
 import sys
-
 app = Flask(__name__)
 
 global path_to_watch
@@ -56,7 +55,7 @@ def index():
     NonAlertpath = "static/NonAlert_image/" + NonAlertpath
     print(NonAlertpath)
     
-    return render_template( "index.html", Most_Recent_Car_Image=NewCarPath, Most_Recent_Person_Image=NewPersonpath, Most_Recent_NonAlert_Image=NonAlertpath,OtherPercent=OtherPercent,VehiclePercent=VehiclePercent, PersonPercent=PersonPercent )
+    return render_template("index.html", Most_Recent_Car_Image=NewCarPath, Most_Recent_Person_Image=NewPersonpath, Most_Recent_NonAlert_Image=NonAlertpath,OtherPercent=OtherPercent,VehiclePercent=VehiclePercent, PersonPercent=PersonPercent )
 
 @app.route("/all_images.html")
 def index2():

@@ -252,10 +252,10 @@ while 1:
         
         # statVar=
         if Sendtext[0]==False:
-            filelist = glob.glob(os.path.join(NewAlertpath, "*.jpg"))
+            filelist = glob.glob(os.path.join(NonAlertpath, "*.jpg"))
             for f in filelist:
                 os.remove(f)
-            # NonAlertpath=newest(path_to_watch)
+            NonAlertpath=newest(path_to_watch)
             result = NonAlertpath.split('/')[-1]
             NewAlertpath = "static/NonAlert_image/" + result
             shutil.copyfile(NonAlertpath, NewAlertpath)
@@ -290,7 +290,7 @@ while 1:
             # Your Account Sid and Auth Token from twilio.com/console
             # DANGER! This is insecure. See http://twil.io/secure
             account_sid = account_sid1
-            auth_token = auth_token1s
+            auth_token = auth_token1
             client = Client(account_sid, auth_token)
             if Sendtext[1] == "V":
                 text_message = "Danger Will Robinson...We have identified an unidentified vehicle. Alert Alert. Danger." 
