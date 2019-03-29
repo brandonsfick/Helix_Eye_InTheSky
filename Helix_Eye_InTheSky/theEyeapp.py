@@ -13,6 +13,7 @@ import glob
 from shutil import copy2
 import shutil
 from twilio.rest import Client  
+import api_key
 
 
 #preliminary model libraries
@@ -32,16 +33,13 @@ import cv2
 path_to_watch = r"/Users/BFick/Dropbox/Apps/Camera_Images/Apps/Camera_Images/"                            # Watching Desktop
 path = r"/Users/BFick/Dropbox/Apps/Camera_Images_Cropped/Apps/Camera_Images_Cropped"
 before = dict ([(f, None) for f in os.listdir (path)]) # Load 'before' dictionary
-NewCarpath= r"/Users/BFick/Desktop/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/NewCar_image/" # * means all if need specific format then *.csv
-NewPersonpath= r"/Users/BFick/Desktop/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/NewPerson_image/" # * means all if need specific format then *.csv
-NonAlertpath =r"/Users/BFick/Desktop/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/NonAlert_image/"
+
 
 def newest(path):
     files = os.listdir(path)
     paths = [os.path.join(path, basename) for basename in files]
     recentPath=max(paths, key=os.path.getctime)
-    result = recentPath.split('/')[-1]
-    return result
+    return recentPath
 
 def files(path):
             files_path = os.path.join(path, '*')
@@ -58,8 +56,8 @@ def Model(Image_path):
         image_size = (299, 299, 3)
 
         #load pre-trained model categories
-        VID = pd.read_csv("vehicle_categories.txt", sep='\t')
-        CID = pd.read_csv("clothing_categories.txt", sep='\t')
+        VID = pd.read_csv(r"/Users/BFick/Desktop/Helix_Eye_InTheSky/vehicle_categories.txt", sep='\t')
+        CID = pd.read_csv(r"/Users/BFick/Desktop/Helix_Eye_InTheSky/clothing_categories.txt", sep='\t')
 
 
         #Run image through Primary Model
@@ -69,7 +67,7 @@ def Model(Image_path):
         image_size = (299, 299, 3)
 
         #image_path = newest(path)
-        img = image.load_img(image_path, target_size=image_size)
+        img = image.load_img(Image_path, target_size=image_size)
 
         x = image.img_to_array(img)
         x = np.expand_dims(x, axis=0)
@@ -114,7 +112,7 @@ def Model(Image_path):
         #load Scenario images for the comparator
         Sarray = [0]
         for scen in range(1,19):
-            Sarray.append(io.imread('./Car Data/cam_base/S%s.jpg' %(scen)))
+            Sarray.append(io.imread(r'/Users/BFick/Desktop/Helix_Eye_InTheSky/Car Data/cam_base/S%s.jpg' %(scen)))
 
         comparray = []
         i1 =0
@@ -123,12 +121,12 @@ def Model(Image_path):
         for img1 in data2['Serial']:
         #for img1 in range(120,130):
             i1+=1
-            print(i1,data2[data2.Serial==img1].Match.item())
+            # print(i1,data2[data2.Serial==img1].Match.item())
             
             #cycle through scenarios for each photo
             resultarray = []
             
-            imgpathio = io.imread(image_path)
+            imgpathio = io.imread(Image_path)
         
             if data2[data2.Serial==img1].Match.item() ==2:
                 #if photo matched to person, run against S1 & S10
@@ -136,7 +134,7 @@ def Model(Image_path):
                     scenario = Sarray[R]
                     combossim = round(compare_ssim(imgpathio,scenario,multichannel=True)*1000)/10
 
-                    resultarray.append([R,combomse,combossim,"P"])
+                    resultarray.append([R,combossim,"P"])
             else:   
                 #if photo matched to vehicle, run against all
                 for S in range(1,19):
@@ -145,9 +143,7 @@ def Model(Image_path):
 
                     resultarray.append([S,combossim,"V"])
             resultdf = pd.DataFrame(resultarray, columns = ['Scenario','SSIM','Type']) 
-
-            Alertlist[1] = resultarray[2]
-            Alertlist[2] = resultarray[1]
+        
 
             #find best match
             Y = int(str(resultdf.loc[resultdf['SSIM'].idxmax()][0]).split('.')[0])
@@ -155,22 +151,25 @@ def Model(Image_path):
             Bestssim = resultdf.loc[resultdf['SSIM'].idxmax()][1]
             Type = resultdf.loc[resultdf['SSIM'].idxmax()][2]
             #Mark high & Low
-            
+
             #Person thresholds are different from vehicle thresholds 
             if data2[data2.Serial==img1].Match.item() ==2:#Is it a person
-                if Bestssim >94:
-                    Alerlist[0] = False
+                Alertlist[1] = "P"
+                if Bestssim >76:
+                    Alertlist[0] = False
                 else:
-                    Alerlist[0] = True
+                    Alertlist[0] = True
             else:  #or is it a vehicle
+                Alertlist[1] = "V"  
                 if Bestssim >82:
-                    Alerlist[0] = False
+                    Alertlist[0] = False
                 else:
-                    Alerlist[0] = True
-                    
+                    Alertlist[0] = True
+            Alertlist[2] = Bestssim
+                  
         return Alertlist
 
-def RunModel()
+def RunModel():
     #find most recent file
     inputfile = newest(path)
     #run modle on most reent file
@@ -215,6 +214,9 @@ def RunModel()
     return ImageCheck
 
 while 1:
+    NewCarpath= r"/Users/BFick/Desktop/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/NewCar_image/" # * means all if need specific format then *.csv
+    NewPersonpath= r"/Users/BFick/Desktop/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/NewPerson_image/" # * means all if need specific format then *.csv
+    NonAlertpath =r"/Users/BFick/Desktop/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/NonAlert_image/"
     Car = None
     Person = None
     nonAlert = None
@@ -235,56 +237,71 @@ while 1:
         updatedfiles=[]
         for s in range(0,20):
             copy2(filePaths[s], NewPath)
-
-    before = after
+    if before != after:
+        before = after
 
         # open the file and upload it
         # with open(filepath, "rb") as f:
         
     #Run Model, receives input as a file path using newest(path)
     
-    Sendtext = RunModel()
+        Sendtext = RunModel()
 
-        # Person, vechile, nonAlert
+   
 
-    if Sendtext[0]:
-           
-        # Your Account Sid and Auth Token from twilio.com/console
-        # DANGER! This is insecure. See http://twil.io/secure
-
-        client = Client(account_sid, auth_token)
-        text_message = "Your Text Here"
-        message = client.messages \
-        .create(
-                body= text_message,
-                from_='+13142072684',
-                to='+1314-537-5418'
-            )
-        print(message.sid)    
-
-    
-    
-    # statVar=
-    if Sendtext[0]:
-        if Sendtext[1] == "V":
-            shutil.rmtree(NewCarpath)  
-            NewCarImage=newest(Car)
+        
+        # statVar=
+        if Sendtext[0]==False:
+            filelist = glob.glob(os.path.join(NewAlertpath, "*.jpg"))
+            for f in filelist:
+                os.remove(f)
+            # NonAlertpath=newest(path_to_watch)
+            result = NonAlertpath.split('/')[-1]
+            NewAlertpath = "static/NonAlert_image/" + result
+            shutil.copyfile(NonAlertpath, NewAlertpath)
+            print(NonAlertpath)
+        
+        elif Sendtext[1] == "V":
+            filelist = glob.glob(os.path.join(NewCarpath, "*.*"))
+            for f in filelist:
+                os.remove(f)
+            # os.mkdir(NewCarpath)
+            NewCarImage=newest(path_to_watch)
             result = NewCarImage.split('/')[-1]
-            NewCarPath = "static/NewCar_image/" + result
-            print(NewCarPath)
+            NewCarpath = "static/NewCar_image/" + result
+            shutil.copyfile(NewCarImage, NewCarpath)  
 
-        if Sendtext[1] == "P":
-            shutil.rmtree(NewPersonpath)
-            NewPersonImage=newest(Person)
+            print(NewCarpath)
+
+        elif Sendtext[1] == "P":
+            filelist = glob.glob(os.path.join(NewPersonpath, "*.*"))
+            for f in filelist:
+                os.remove(f)
+            # os.mkdir(NewPersonpath)
+            NewPersonImage=newest(path_to_watch)
             result = NewPersonImage.split('/')[-1]
             NewPersonpath = "static/NewPerson_image/" + result
-            print(NewPersonpath)
-    else:
-        shutil.rmtree(NonAlertpath)
-        NonAlertpath=newest(NonAlert)
-        result = NonAlertpath.split('/')[-1]
-        NonAlertpath = "static/NonAlert_image/" + result
-        print(NonAlertpath)
-        
+            shutil.copyfile(NewPersonImage, NewPersonpath)  
 
-    time.sleep (1) # 5 sec between polling
+            print(NewPersonpath)
+
+        if Sendtext[0]:
+            
+            # Your Account Sid and Auth Token from twilio.com/console
+            # DANGER! This is insecure. See http://twil.io/secure
+            account_sid = account_sid1
+            auth_token = auth_token1s
+            client = Client(account_sid, auth_token)
+            if Sendtext[1] == "V":
+                text_message = "Danger Will Robinson...We have identified an unidentified vehicle. Alert Alert. Danger." 
+            else:
+                text_message ="Danger Will Robinson...We have identified a Person. Alert Alert. Danger."
+            message = client.messages \
+                .create(
+                        body= text_message,
+                        from_='+13142072684',
+                        to='+1314-537-5418'
+                    )
+            print(message.sid)     
+
+        time.sleep (1) # 5 sec between polling

@@ -2,6 +2,7 @@ import os
 import os, time
 import pandas as pd
 import numpy as np
+import pandas
 
 import sqlalchemy
 from flask import send_file
@@ -25,9 +26,13 @@ global path_to_watch
 
 @app.route("/")
 def index():
-    # const webViewLink = await drive.files.get({
-    # fileId: file.id,
-    # fields: 'webViewLink'}).then(response => response.data.webViewLink)
+    dfOther = pandas.read_csv('OtherphotoLog.csv')
+    dfPerson = pandas.read_csv('PeopleLog.csv')
+    dfVehicle = pandas.read_csv('VehicleLog.csv')
+    OtherPercent=dfOther.tail(1)
+    VehiclePercent =dfVehicle.tail(1)
+    PersonPercent= dfPerson.tail(1)
+
     def newest(path):
 
         files = os.listdir(path)
@@ -51,7 +56,7 @@ def index():
     NonAlertpath = "static/NonAlert_image/" + NonAlertpath
     print(NonAlertpath)
     
-    return render_template( "index.html", Most_Recent_Car_Image=NewCarPath, Most_Recent_Person_Image=NewPersonpath, Most_Recent_NonAlert_Image=NonAlertpath )
+    return render_template( "index.html", Most_Recent_Car_Image=NewCarPath, Most_Recent_Person_Image=NewPersonpath, Most_Recent_NonAlert_Image=NonAlertpath,OtherPercent=OtherPercent,VehiclePercent=VehiclePercent, PersonPercent=PersonPercent )
 
 @app.route("/all_images.html")
 def index2():
