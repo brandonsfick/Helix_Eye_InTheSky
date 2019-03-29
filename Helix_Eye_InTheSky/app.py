@@ -2,6 +2,7 @@ import os
 import os, time
 import pandas as pd
 import numpy as np
+import pandas
 
 import sqlalchemy
 from flask import send_file
@@ -25,6 +26,13 @@ global path_to_watch
 
 @app.route("/")
 def index():
+    dfOther = pandas.read_csv('OtherphotoLog.csv')
+    dfPerson = pandas.read_csv('PeopleLog.csv')
+    dfVehicle = pandas.read_csv('VehicleLog.csv')
+    OtherPercent=dfOther.tail(1)
+    VehiclePercent =dfVehicle.tail(1)
+    PersonPercent= dfPerson.tail(1)
+
     def newest(path):
 
         files = os.listdir(path)
@@ -32,9 +40,9 @@ def index():
         recentPath=max(paths, key=os.path.getctime)
         result = recentPath.split('/')[-1]
         return result
-    NewCarpath= r"/Users/sstev/Documents/Final Project/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/NewCar_image/" # UPDATE for your computer
-    NewPersonpath= r"/Users/sstev/Documents/Final Project/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/NewPerson_image/" # UPDATE for your computer
-    NonAlertpath =r"/Users/sstev/Documents/Final Project/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/NonAlert_image/" # UPDATE for your computer
+    NewCarpath= r"/Users/BFick/Desktop/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/NewCar_image/" # UPDATE for your computer
+    NewPersonpath= r"/Users/BFick/Desktop/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/NewPerson_image/" # UPDATE for your computer
+    NonAlertpath =r"/Users/BFick/Desktop/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/NonAlert_image/" # UPDATE for your computer
     
     NewCarImage=newest(NewCarpath)
     NewCarPath = "static/NewCar_image/" + NewCarImage
@@ -48,7 +56,7 @@ def index():
     NonAlertpath = "static/NonAlert_image/" + NonAlertpath
     print(NonAlertpath)
     
-    return render_template( "index.html", Most_Recent_Car_Image=NewCarPath, Most_Recent_Person_Image=NewPersonpath, Most_Recent_NonAlert_Image=NonAlertpath )
+    return render_template( "index.html", Most_Recent_Car_Image=NewCarPath, Most_Recent_Person_Image=NewPersonpath, Most_Recent_NonAlert_Image=NonAlertpath,OtherPercent=OtherPercent,VehiclePercent=VehiclePercent, PersonPercent=PersonPercent )
 
 @app.route("/all_images.html")
 def index2():
@@ -58,7 +66,7 @@ def index2():
         files = sorted(glob.iglob(files_path), key=os.path.getctime, reverse=True) 
         return files
     
-    NewPath = r"/Users/sstev/Documents/Final Project/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/Last20" # UPDATE for your computer
+    NewPath = r"/Users/BFick/Desktop/Helix_Eye_InTheSky/Helix_Eye_InTheSky/static/Last20" # UPDATE for your computer
     filePaths=files(NewPath)
     s=0
     updatedfiles=[]
