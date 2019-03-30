@@ -25,6 +25,7 @@ global path_to_watch
 
 @app.route("/")
 def index():
+    #imports logs and extracts the SSIM and XCP variable
     dfOther = pandas.read_csv('OtherphotoLog.csv')
     dfPerson = pandas.read_csv('PeopleLog.csv')
     dfVehicle = pandas.read_csv('VehicleLog.csv')
@@ -32,6 +33,11 @@ def index():
     VehiclePercent =dfVehicle.tail(1)
     PersonPercent= dfPerson.tail(1)
 
+    OtherPercent=OtherPercent.XCP.values[0]
+    VehiclePercent=VehiclePercent.SSIM.values[0]
+    PersonPercent=PersonPercent.SSIM.values[0]
+
+    #finds file and the path
     def newest(path):
 
         files = os.listdir(path)

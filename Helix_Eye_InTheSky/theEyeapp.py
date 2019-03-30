@@ -289,9 +289,9 @@ while 1:
             
             # Your Account Sid and Auth Token from twilio.com/console
             # DANGER! This is insecure. See http://twil.io/secure
-            account_sid = account_sid1
-            auth_token = auth_token1
-            client = Client(account_sid, auth_token)
+            # account_sid = str(account_sid1)
+            # auth_token = str(auth_token1)
+            client = Client(api_key.account_sid, api_key.auth_token)
             if Sendtext[1] == "V":
                 text_message = "Danger Will Robinson...We have identified an unidentified vehicle. Alert Alert. Danger." 
             else:
